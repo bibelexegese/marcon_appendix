@@ -1,0 +1,49 @@
+cff-version: 1.2.0
+title: >-
+  Appendix: Contents of the catena of GA 1923 – Dataset
+message: >-
+  If you use this dataset, please cite it using the
+  metadata from this file.
+type: dataset
+version: "1.0"
+keywords: 
+  - Catenae
+  - GA 1923
+  - Ps.-Oecumenius
+  - Romans
+identifiers:
+  - description: This is the source code of the website and the dataset
+    type: doi
+    value: 10.5281/zenodo.XXXXXXXX
+  - description: This is the website using the dataset
+    type: url
+    value: https://nbn-resolving.org/urn:nbn:de:kobv:b4-2501301210327.102142905106
+date-released: 2025-03-10
+license: CC-BY-4.0
+authors:
+  - given-names: Jacopo
+    family-names: Marcon
+    email: jacopo.marcon@bbaw.de
+    affiliation: >-
+      Berlin-Brandenburgische Akademie der Wissenschaften
+    orcid: 'https://orcid.org/0000-0002-3756-8113'
+references:
+  - authors:
+      - family-names: Marcon
+        given-names: Jacopo
+    title: "The Pseudo-Oecumenian Catena on Romans. A philological examination of one of the earliest catena on the Pauline Epistles"
+    type: book
+    year: 2025
+preferred-citation:
+  authors:
+    - given-names: Jacopo
+      family-names: Marcon
+  title: >-
+    Appendix: Contents of the catena of GA 1923 – Dataset
+  type: data
+  version: "1.0"
+  year: 2025
+  identifiers:
+  - type: url
+    value: https://nbn-resolving.org/urn:nbn:de:kobv:b4-2501301210327.102142905106
+

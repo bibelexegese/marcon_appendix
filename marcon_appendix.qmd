@@ -1,0 +1,636 @@
+---
+title: "Appendix: Contents of the catena of GA 1923 – Dataset"
+author: "Jacopo Marcon"
+
+format: 
+    dashboard:
+        embed-resources: true
+        date-modified: 2025-03-10
+        doi: 10.5281/zenodo.11384542XXX
+        urn: urn:nbn:de:kobv:b4-2501301210327.102142905106
+        keywords: Catenae, Romans, GA 1923, Ps.-Oecumenius
+        license: CC-BY
+        output-file: index
+        theme: cosmo
+        nav-buttons: 
+            - icon: book
+              href: ../index.html
+            - icon: github
+              href: https://github.com/bibelexegese/marcon_appendix
+---
+# Type of Scholion
+## Row
+
+### Column {width=30%}
+::: {.card title="Select type of Scholion"}
+```{ojs}
+viewof filterType = Inputs.select(["All", "Numbered", "Scholia Photiana", "Corpus Extravagantium"], {label: "Type", value: "Numbered"})
+
+viewof biblicalVerseFilter = Inputs.select(Array.from(new Set(mergedData.map(d => {
+  const biblicalVerse = d["Biblical verse"];
+  if (biblicalVerse === null || biblicalVerse === undefined) {
+    return "";
+  }
+  const splitVerse = biblicalVerse.split(":");
+  return splitVerse.length > 1 ? splitVerse[0] : biblicalVerse;
+}))), {label: "Chapter", multiple: true, value: []})
+
+viewof s_entry = Inputs.select(s_entry_id, {label: "Result no.", format: x => x+1})
+```
+:::
+
+
+### Column {width=70%}
+::: {.card title="Data"}
+
+${s_color[s_entry] ? "⚠" + s_color[s_entry]: s_color[s_entry]}
+
+Scholion ID:
+: ${s_scholia[s_entry]} (cite as “Marcon, *Scholion* ${s_scholia[s_entry]}”)
+
+Folio:
+: ${s_folio[s_entry]} 
+
+Number / Attribution:
+: ${s_no[s_entry]}
+
+Notes:
+: ${s_notes[s_entry]}
+
+Count of Scholion for the current biblical verse:
+: ${s_nscholia[s_entry]}
+
+Biblical verse:
+: ${s_bibl[s_entry]}
+
+Lemma:
+: ${s_biblical[s_entry]}
+
+Identification:
+: ${s_identification[s_entry]}
+
+Scholion:
+: ${s_comment[s_entry]}
+:::
+
+```{ojs}
+//| output: false
+S_type = mergedData.map(d => d["Scholia"]).filter(
+  (item, index, inputArray) =>
+    inputArray.indexOf(item) == index
+)
+
+S_type_ref = mergedData.filter(function(pls) {
+  const regexOnlyNumbers = /^\d+$/;
+  const regexWithPh = /^\d+Ph/;
+  const regexWithEx = /^\d+ex/;
+
+  const biblicalVerse = pls["Biblical verse"];
+  if (biblicalVerse === null || biblicalVerse === undefined) {
+    return false;
+  }  
+  const splitVerse = biblicalVerse.split(":");
+  const verse = splitVerse.length > 1 ? splitVerse[0] : biblicalVerse;
+
+  if (filterType === "All") {
+    return S_type.includes(pls["Scholia"]) && (biblicalVerseFilter.length === 0 || biblicalVerseFilter.includes(verse));
+  } else if (filterType === "Numbered") {
+    return S_type.includes(pls["Scholia"]) && regexOnlyNumbers.test(pls["Scholia"]) && (biblicalVerseFilter.length === 0 || biblicalVerseFilter.includes(verse));
+  } else if (filterType === "Scholia Photiana") {
+    return S_type.includes(pls["Scholia"]) && regexWithPh.test(pls["Scholia"]) && (biblicalVerseFilter.length === 0 || biblicalVerseFilter.includes(verse));
+  } else if (filterType === "Corpus Extravagantium") {
+    return S_type.includes(pls["Scholia"]) && regexWithEx.test(pls["Scholia"]) && (biblicalVerseFilter.length === 0 || biblicalVerseFilter.includes(verse));
+  }
+  return false;
+})
+
+
+s_entry_id = Array.from(S_type_ref.keys())
+
+s_id = S_type_ref.map(d => d["ID"])
+
+s_color = S_type_ref.map(d => {
+  const colorMap = {
+    "Orange": "Start of a new lemmatic unit",
+    "Green": "Scholium refers to a different biblical verse than the direct tradition"
+  };
+  return colorMap[d.colors] || ""; // return "" if color is not found
+});
+
+s_folio = S_type_ref.map(d => d["Folio"])
+
+s_scholia = S_type_ref.map(d => d["Scholia"])
+
+s_no = S_type_ref.map(d => d["Number or attribution"])
+
+s_bibl = S_type_ref.map(d => d["Biblical verse"])
+
+s_nscholia = S_type_ref.map(d => d["Number of scholia per biblical verse"])
+
+s_identification = S_type_ref.map(d => d["Identification"])
+
+s_notes = S_type_ref.map(d => d["Notes"])
+
+s_biblical = S_type_ref.map(d => d["Biblical"])
+
+s_comment = S_type_ref.map(d => d["Comment"])
+
+```
+
+# Biblical verse
+
+## Row
+
+### Column {width=30%}
+::: {.card title="Select biblical verse"}
+```{ojs}
+viewof all_ids = Inputs.select(mergedData.map(d => d["Biblical verse"]), {unique: true, multiple: true, value: ["Rom 1:2"]})
+
+viewof id_entry = Inputs.select(id_entry_id, {label: "Result no.", format: x => x+1})
+```
+:::
+
+
+### Column {width=70%}
+::: {.card title="Data"}
+
+${id_color[id_entry] ? "⚠" + id_color[id_entry]: id_color[id_entry]}
+
+Scholion ID:
+: ${id_scholia[id_entry]} (cite as “Marcon, *Scholion* ${id_scholia[id_entry]}”)
+
+Folio:
+: ${id_folio[id_entry]} 
+
+Number / Attribution:
+: ${id_no[id_entry]}
+
+Notes:
+: ${id_notes[id_entry]}
+
+Count of Scholion for the current biblical verse:
+: ${id_nscholia[id_entry]}
+
+Biblical verse:
+: ${id_bibl[id_entry]}
+
+Lemma:
+: ${id_biblical[id_entry]}
+
+Identification:
+: ${id_identification[id_entry]}
+
+Scholion:
+: ${id_comment[id_entry]}
+:::
+
+
+```{ojs}
+//| output: false
+
+
+ids = mergedData.map(d => d["Biblical verse"]).filter(
+  (item, index, inputArray) =>
+    inputArray.indexOf(item) == index
+)
+
+all_ids_ref = mergedData.filter(function(pls) {
+  return all_ids.includes(pls["Biblical verse"]);
+  // matching funktioniert nicht
+})
+
+
+id_entry_id = all_ids_ref.keys()
+
+id_id = all_ids_ref.map(d => d["ID"])
+
+id_color = all_ids_ref.map(d => {
+  const colorMap = {
+    "Orange": "Start of a new lemmatic unit",
+    "Green": "Scholium refers to a different biblical verse than the direct tradition"
+  };
+  return colorMap[d.colors] || ""; // return "" if color is not found
+});
+
+id_folio = all_ids_ref.map(d => d["Folio"])
+
+id_scholia = all_ids_ref.map(d => d["Scholia"])
+
+id_no = all_ids_ref.map(d => d["Number or attribution"])
+
+id_bibl = all_ids_ref.map(d => d["Biblical verse"])
+
+id_nscholia = all_ids_ref.map(d => d["Number of scholia per biblical verse"])
+
+id_identification = all_ids_ref.map(d => d["Identification"])
+
+id_notes = all_ids_ref.map(d => d["Notes"])
+
+id_biblical = all_ids_ref.map(d => d["Biblical"])
+
+id_comment = all_ids_ref.map(d => d["Comment"])
+
+```
+
+# Text of Lemmata
+
+## Row 
+
+### Column {width=20%}
+::: {.card title="Select Word"}
+```{ojs}
+function splitArrayValues(array) {
+  const wordsArray = [];
+
+  array?.forEach(value => {
+    if (typeof value !== 'string') return "empty";
+
+    const regex = /[\",.“”{}«»><·()+\-!://?\[\]…0-9a-z]/g;
+    const words = value.toLowerCase().replace(regex,"").split(' ');
+
+    words.forEach(word => {
+      wordsArray.push(word.trim()); 
+    });
+  });
+  const uniqueArray = Array.from(new Set(wordsArray));
+  return uniqueArray;
+}
+
+newlemma = splitArrayValues(mergedData.map(d => d["Biblical"]))
+viewof all_lemmata = Inputs.select(newlemma.sort((a, b) => a.localeCompare(b)), {unique: true,  multiple: false, value: "παῦλος"})
+
+viewof l_entry = Inputs.select(l_entry_id, {label: "Result no.", format: x => x+1})
+
+```
+:::
+
+### Column {width=50%}
+
+::: {.card title="Data"}
+
+${l_color[l_entry] ? "⚠" + l_color[l_entry]: l_color[l_entry]}
+
+Scholion ID:
+: ${l_scholia[l_entry]} (cite as “Marcon, *Scholion* ${l_scholia[l_entry]}”)
+
+Folio:
+: ${l_folio[l_entry]} 
+
+Number / Attribution:
+: ${l_no[l_entry]}
+
+Notes:
+: ${l_notes[l_entry]}
+
+Count of Scholion for the current biblical verse:
+: ${l_nscholia[l_entry]}
+
+Biblical verse:
+: ${l_bibl[l_entry]}
+
+Lemma:
+: ${l_biblical[l_entry]}
+
+Identification:
+: ${l_identification[l_entry]}
+
+Scholion:
+: ${l_comment[l_entry]}
+:::
+
+
+
+```{ojs}
+//| output: false
+lemmata = mergedData.map(d => d["Biblical"]).filter(
+  (item, index, inputArray) =>
+    inputArray.indexOf(item) == index
+)
+
+all_lemmata_ref = all_lemmata?.trim() !== '' 
+  ? mergedData.filter(function(pls) {
+    return (pls["Biblical"] ?? '').trim().toLowerCase().includes(all_lemmata.toLowerCase());
+  }) 
+  : [];
+
+l_entry_id = all_lemmata_ref.keys()
+
+l_color = all_lemmata_ref.map(d => {
+  const colorMap = {
+    "Orange": "Start of a new lemmatic unit",
+    "Green": "Scholium refers to a different biblical verse than the direct tradition"
+  };
+  return colorMap[d.colors] || ""; // return "" if color is not found
+});
+
+l_folio = all_lemmata_ref.map(d => d["Folio"])
+
+l_scholia = all_lemmata_ref.map(d => d["Scholia"])
+
+l_no = all_lemmata_ref.map(d => d["Number or attribution"])
+
+l_bibl = all_lemmata_ref.map(d => d["Biblical verse"])
+
+l_nscholia = all_lemmata_ref.map(d => d["Number of scholia per biblical verse"])
+
+l_identification = all_lemmata_ref.map(d => d["Identification"])
+
+l_notes = all_lemmata_ref.map(d => d["Notes"])
+
+l_biblical = all_lemmata_ref.map(d => d["Biblical"])
+
+l_comment = all_lemmata_ref.map(d => d["Comment"])
+```
+
+# Text of Scholia
+
+## Row 
+
+### Column {width=20%}
+::: {.card title="Select Word"}
+```{ojs}
+newdata = splitArrayValues(mergedData.map(d => d["Comment"]))
+viewof all_texts = Inputs.select(newdata.sort((a, b) => a.localeCompare(b)), {unique: true,  multiple: false, value: "γράφειν"})
+
+viewof t_entry = Inputs.select(t_entry_id, {label: "Result no.", format: x => x+1})
+
+```
+:::
+
+### Column {width=50%}
+
+::: {.card title="Data"}
+
+${t_color[t_entry] ? "⚠" + t_color[t_entry]: t_color[t_entry]}
+
+Scholion ID:
+: ${t_scholia[t_entry]} (cite as “Marcon, *Scholion* ${t_scholia[t_entry]}”)
+
+Folio:
+: ${t_folio[t_entry]} 
+
+Number / Attribution:
+: ${t_no[t_entry]}
+
+Notes:
+: ${t_notes[t_entry]}
+
+Count of Scholion for the current biblical verse:
+: ${t_nscholia[t_entry]}
+
+Biblical verse:
+: ${t_bibl[t_entry]}
+
+Lemma:
+: ${t_biblical[t_entry]}
+
+Identification:
+: ${t_identification[t_entry]}
+
+Scholion:
+: ${t_comment[t_entry]}
+:::
+
+
+
+```{ojs}
+//| output: false
+texts = mergedData.map(d => d["Comment"]).filter(
+  (item, index, inputArray) =>
+    inputArray.indexOf(item) == index
+)
+
+all_texts_ref = all_texts?.trim() !== '' 
+  ? mergedData.filter(function(pls) {
+    return (pls["Comment"] ?? '').trim().toLowerCase().includes(all_texts.toLowerCase());
+  }) 
+  : [];
+
+t_entry_id = all_texts_ref.keys()
+
+t_color = all_texts_ref.map(d => {
+  const colorMap = {
+    "Orange": "Start of a new lemmatic unit",
+    "Green": "Scholium refers to a different biblical verse than the direct tradition"
+  };
+  return colorMap[d.colors] || ""; // return "" if color is not found
+});
+
+t_folio = all_texts_ref.map(d => d["Folio"])
+
+t_scholia = all_texts_ref.map(d => d["Scholia"])
+
+t_no = all_texts_ref.map(d => d["Number or attribution"])
+
+t_bibl = all_texts_ref.map(d => d["Biblical verse"])
+
+t_nscholia = all_texts_ref.map(d => d["Number of scholia per biblical verse"])
+
+t_identification = all_texts_ref.map(d => d["Identification"])
+
+t_notes = all_texts_ref.map(d => d["Notes"])
+
+t_biblical = all_texts_ref.map(d => d["Biblical"])
+
+t_comment = all_texts_ref.map(d => d["Comment"])
+```
+
+
+# Browse
+
+## Row {.tabset}
+
+### Search
+
+#### {width=20%}
+```{ojs}
+
+viewof search = Inputs.search(mergedData, {
+  placeholder: "Search",
+  columns: ["Scholia","Folio","Number or attribution","Biblical verse","Number of scholia per biblical verse","Identification","Notes","Biblical","Comment"],
+})
+
+md`${rows.length} item(s) selected`
+```
+::: {.card title="How to browse this table"}
+You can do a simple full text search on the data. 
+
+If you hover your cursor over the table you can select rows by checking the boxes. 
+
+The results of the selection are shown in the “Results” tab left of the table.
+
+You can sort the columns by clicking on the bold header of a column.
+:::
+
+#### {width=80%}
+```{ojs}
+td_format = (d, i, data) => {
+  const color = data[i].colors; // Get the color from the colors column
+  const backgroundColor = color ? color : 'white'; // Default to white if no color is provided
+  const textcolor = color ? 'white' : 'black';
+  return htl.html`<span style="white-space:normal; padding: 5px; color: ${textcolor}; background-color: ${backgroundColor};">${d}</span>`;
+};
+
+viewof rows = Inputs.table(search, {
+  rows: 250,
+  width: {
+    "ID": 50
+  },
+  align: {
+    "ID": "left"
+  },header: {
+    "Folio": "Folio",
+    "Scholia": "Scholion ID",
+    "Number or attribution": "Number or attribution",
+    "Biblical verse": "Biblical verse",
+    "Number of scholia per biblical verse": "Count of Scholion for the current biblical verse",
+    "Identification": "Identification",
+    "Notes": "Notes",
+    "Biblical": "Lemma",
+    "Comment": "Scholion",
+  },
+  format: {
+    "Folio": d => htl.html`<span style="white-space:normal">${d}</span>`,
+    "Scholia": td_format,
+    "Number or attribution": d => htl.html`<span style="white-space:normal">${d}</span>`,
+    "Biblical verse": d => htl.html`<span style="white-space:normal">${d}</span>`,
+    "Number of scholia per biblical verse": d => htl.html`<span style="white-space:normal">${d}</span>`,
+    "Identification": d => htl.html`<span style="white-space:normal">${d}</span>`,
+    "Notes": d => htl.html`<span style="white-space:normal">${d}</span>`,
+    "Biblical": d => htl.html`<span style="white-space:normal">${d}</span>`,
+    "Comment": d => htl.html`<span style="white-space:normal">${d}</span>`,
+  },
+})
+
+data = FileAttachment("data/marcon_dataset.tsv").tsv({ typed: true })
+transcriptions = FileAttachment("data/transcriptions.tsv").tsv({ typed: true }) // Load the second TSV file
+
+// Load the data
+data1 = await data
+data2 = await transcriptions
+
+// Create a lookup table for the second TSV based on the common ID
+lookup = Object.fromEntries(data2.map(d2 => [d2["Unit"], { Biblical: d2["Biblical"], Comment: d2["Comment"] }])); // Replace with your actual column names
+
+// Merge specific columns from the second TSV into the first TSV
+mergedData = data1.map(d1 => {
+  const scholiaValue = d1["Scholia"];
+  const scholiaKey = typeof scholiaValue === 'string' ? scholiaValue.trim() : scholiaValue; // Trim if it's a string
+  const match = lookup[scholiaKey]; // Use the trimmed key for fast access
+  return match ? { ...d1, ...match } : d1; // Merge if a match is found, otherwise return the original
+});
+
+```
+
+### Results
+
+#### Column {width=25%}
+
+##### Row {height=15%}
+```{ojs}
+viewof r_entry = Inputs.select(r_entry_id, {label: "Result no.", format: x => x+1})
+```
+
+##### Row {height=85%}
+::: {.card title="Metadata"}
+ 
+${r_color[r_entry] ? "⚠" + r_color[r_entry]: r_color[r_entry]}
+
+Scholion ID:
+: ${r_scholia[r_entry]} (cite as “Marcon, *Scholion* ${r_scholia[r_entry]}”)
+
+Folio:
+: ${r_folio[r_entry]} 
+
+Number / Attribution:
+: ${r_no[r_entry]}
+
+Notes:
+: ${r_notes[r_entry]}
+
+Count of Scholion for the current biblical verse:
+: ${r_nscholia[r_entry]}
+
+:::
+
+#### Column {width=25%}
+
+::: {.card title="Data"}
+
+Biblical verse:
+: ${r_bibl[r_entry]}
+
+Lemma:
+: ${r_biblical[r_entry]}
+
+Identification:
+: ${r_identification[r_entry]}
+
+Scholion:
+: ${r_comment[r_entry]}
+:::
+
+
+```{ojs}
+//| output: false
+
+r_entry_id = rows.keys()
+
+r_id = rows.map(d => d["ID"])
+
+r_color = rows.map(d => {
+  const colorMap = {
+    "Orange": "Start of a new lemmatic unit",
+    "Green": "Scholium refers to a different biblical verse than the direct tradition"
+  };
+  return colorMap[d.colors] || ""; // return "" if color is not found
+});
+
+r_folio = rows.map(d => d["Folio"])
+
+r_scholia = rows.map(d => d["Scholia"])
+
+r_no = rows.map(d => d["Number or attribution"])
+
+r_bibl = rows.map(d => d["Biblical verse"])
+
+r_nscholia = rows.map(d => d["Number of scholia per biblical verse"])
+
+r_identification = rows.map(d => d["Identification"])
+
+r_notes = rows.map(d => d["Notes"])
+
+r_biblical = rows.map(d => d["Biblical"])
+
+r_comment = rows.map(d => d["Comment"])
+```
+
+
+# About
+
+::: {.card}
+This is a dataset to [Jacopo Marcon, *The Pseudo-Oecumenian Catena on Romans. A philological examination of one of the earliest catena on the Pauline Epistles*, TU 196, Berlin/Boston 2025](https://www.degruyter.com/document/isbn/9783111437842/html).
+
+The dataset illustrates the content of [GA 1923 (Venezia, Biblioteca Nazionale Marciana, gr. Z. 33)](https://pinakes.irht.cnrs.fr/notices/cote/69504/), modelled on that provided for Codex Zacynthius.  The *Scholia* column indicates the number of the scholia assigned during the present research, with the specification of *Ph* for the *Scholia Photiana* and *ex* for the Corpus Extravagantium. This is followed by the numbering and the attributions as they appear in the manuscript, the relevant biblical verse, and the number of scholia per each biblical unit. When there is no attribution or sign for the scholium a ‘—’ is used. The *Identification* column provides the identification of the scholia based on the direct sources, when available, or the TLG. The abbreviated bibliographical references correspond to the name of the author and the date of publication as in the Bibliography and in the footnote-references of the print publication. The beginning of each new lemmatic unit has been highlighted in *orange*, while all the occurrences in which a scholium refers to a different biblical verse than the direct tradition are in *green*. The Latin numbers in parentheses indicate the portions of biblical verses that are commented (e.g., I = first part of Rom 1:1, II = second part of Rom 1:1); when the same number follows in sequence, it means that two different scholia comment on the same portion of biblical verse. [GA 91 (Paris, Bibliothèque nationale de France, Grec 219)](https://pinakes.irht.cnrs.fr/notices/cote/49790/) has been taken into account for the occurrences in which the symbol/number is absent above the biblical section, or referring to a longer portion of biblical text.
+
+The transcriptions (in the columns “Lemma” and “Scholion”) are taken from [Marcon, Jacopo (2024) Manuscript transcriptions and synopses of scholia of the Pseudo-Oecumenian Catena on Romans](https://doi.org/10.25500/edata.bham.00001097) (with corrections in the attribution of some scholia).
+
+For comments or questions, please contact <jacopo.marcon@bbaw.de>.
+
+The source code of this website and the dataset used is at <https://github.com/bibelexegese/marcon_appendix> [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.XXXXXXXX.svg)](https://doi.org/10.5281/zenodo.XXXXXXXX).
+
+:::
+
+
+::: {.card}
+
+## Cite as
+
+Jacopo Marcon, Appendix: Contents of the catena of GA 1923 – dataset, v1.0, 14 April 2025, <https://nbn-resolving.org/urn:nbn:de:kobv:b4-2501301210327.102142905106>.
+
+## Rights
+All data is available under a [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/).
+
+## Technical Implementation
+[Annette von Stockhausen](mailto:annette.von_stockhausen@bbaw.de) with the help of [Quarto](https://quarto.org/). The web service is provided and maintained by [TELOTA - IT/DH](https://www.bbaw.de/bbaw-digital/telota).
+:::
