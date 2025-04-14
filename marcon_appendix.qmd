@@ -6,7 +6,7 @@ format:
     dashboard:
         embed-resources: true
         date-modified: 2025-03-10
-        doi: 10.5281/zenodo.11384542XXX
+        doi: 10.5281/zenodo.15210871
         urn: urn:nbn:de:kobv:b4-2501301210327.102142905106
         keywords: Catenae, Romans, GA 1923, Ps.-Oecumenius
         license: CC-BY
@@ -617,7 +617,7 @@ The transcriptions (in the columns “Lemma” and “Scholion”) are taken fro
 
 For comments or questions, please contact <jacopo.marcon@bbaw.de>.
 
-The source code of this website and the dataset used is at <https://github.com/bibelexegese/marcon_appendix> [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.XXXXXXXX.svg)](https://doi.org/10.5281/zenodo.XXXXXXXX).
+The source code of this website and the dataset used is at <https://github.com/bibelexegese/marcon_appendix> [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15210871.svg)](https://doi.org/10.5281/zenodo.15210871).
 
 :::
 

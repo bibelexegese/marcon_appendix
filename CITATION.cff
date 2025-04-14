@@ -14,7 +14,7 @@ keywords:
 identifiers:
   - description: This is the source code of the website and the dataset
     type: doi
-    value: 10.5281/zenodo.XXXXXXXX
+    value: 10.5281/zenodo.15210871
   - description: This is the website using the dataset
     type: url
     value: https://nbn-resolving.org/urn:nbn:de:kobv:b4-2501301210327.102142905106

@@ -2,7 +2,7 @@
 
 For comments or questions, please contact <jacopo.marcon@bbaw.de>.
 
-This repository is archived at [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.XXXXXXXX.svg)](https://doi.org/10.5281/zenodo.XXXXXXXX)
+This repository is archived at [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15210871.svg)](https://doi.org/10.5281/zenodo.15210871)
 
 This is the dataset to [Jacopo Marcon, *The Pseudo-Oecumenian Catena on Romans. A philological examination of one of the earliest catena on the Pauline Epistles*, TU 196, Berlin/Boston 2025](https://www.degruyter.com/document/isbn/9783111437842/html).
 
